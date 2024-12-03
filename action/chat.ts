@@ -9,7 +9,6 @@ import {
 } from "@/lib/serverUtils";
 import { createWriteStream } from "fs";
 import { MessageTypes } from "@/store/chatStore";
-import ffmpeg from "@ffmpeg-installer/ffmpeg";
 
 const openai = new OpenAI({
 	apiKey: process.env.OPENAI_API_KEY || "-", // Your OpenAI API key here, I used "-" to avoid errors when the key is not set but you should not do that
@@ -131,9 +130,7 @@ const lipSyncMessage = async (index: number) => {
 	const time = new Date().getTime();
 	console.log(`Starting conversion for message ${index}`);
 	await execCommand(
-		`${
-			process.env.NODE_ENV === "production" ? ffmpeg.path : "ffmpeg"
-		} -y -i audios/message_${index}.mp3 audios/message_${index}.wav`
+		`ffmpeg -y -i audios/message_${index}.mp3 audios/message_${index}.wav`
 		// -y to overwrite the file
 	);
 	console.log(`Conversion done in ${new Date().getTime() - time}ms`);

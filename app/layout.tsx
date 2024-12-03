@@ -13,7 +13,9 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className="w-full h-screen">{children}</body>
+			<body className="w-full h-screen bg-gradient-to-br from-pink-300 to-slate-300">
+				{children}
+			</body>
 		</html>
 	);
 }

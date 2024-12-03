@@ -4,7 +4,9 @@ export async function GET() {
 	try {
 		await execCommand(
 			`${
-				process.env.NODE_ENV === "production" ? ".bin/rhubarb" : "rhubarb"
+				process.env.NODE_ENV === "production"
+					? `${process.cwd()}/.bin/rhubarb`
+					: "rhubarb"
 			} -f json -o audios/message_0.json audios/api_0.wav -r phonetic`
 		);
 		return Response.json({ message: "Success!" });

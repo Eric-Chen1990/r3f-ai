@@ -1,6 +1,6 @@
 "use client";
 
-import { chat } from "@/action/chat";
+import { chatCloudFunc } from "@/action/chatCloudFunc";
 import { corresponding } from "@/const/corresponding";
 import { facialExpressions } from "@/const/facialExpressions";
 import useChatStore, { LipsyncType } from "@/store/chatStore";
@@ -173,7 +173,7 @@ const Avatar = (props: GroupProps) => {
 
 	useControls("FacialExpressions", {
 		chat: button(async () => {
-			const data = await chat("test");
+			const data = await chatCloudFunc("test");
 			if (data?.messages) {
 				setMessages(data.messages);
 			}

@@ -1,5 +1,5 @@
 "use client";
-import { chat } from "@/action/chat";
+import { chatCloudFunc } from "@/action/chatCloudFunc";
 import useChatStore from "@/store/chatStore";
 import { useEffect, useState, useTransition } from "react";
 
@@ -20,8 +20,7 @@ export const UI = ({ hidden }: UIProps) => {
 
 	const sendMessage = () => {
 		startTransition(async () => {
-			const data = await chat(inputValue);
-			console.log("🚀 --> file: UI.tsx:24 --> startTransition --> data:", data);
+			const data = await chatCloudFunc(inputValue);
 			if (data?.messages) {
 				setMessages(data.messages);
 			}
@@ -37,7 +36,7 @@ export const UI = ({ hidden }: UIProps) => {
 		<>
 			<div className="fixed top-0 bottom-0 left-0 right-0 z-10 flex flex-col justify-between p-4 pointer-events-none">
 				<div className="self-start p-4 bg-white bg-opacity-50 rounded-lg backdrop-blur-md">
-					<h1 className="text-xl font-black">My Virtual GF</h1>
+					<h1 className="text-xl font-black">Virtual GF</h1>
 					<p>I will always love you ❤️</p>
 				</div>
 				<div className="flex flex-col items-end justify-center w-full gap-4">

@@ -10,7 +10,7 @@ type UIProps = {
 export const UI = ({ hidden }: UIProps) => {
 	const [inputValue, setInputValue] = useState("");
 	const [isPending, startTransition] = useTransition();
-	const { cameraZoomed, setCameraZoomed, messages, setMessages } =
+	const { cameraZoomed, setCameraZoomed, messages, setMessages, setLoading } =
 		useChatStore();
 	const [disableSend, setDisableSend] = useState(false);
 
@@ -19,12 +19,14 @@ export const UI = ({ hidden }: UIProps) => {
 	}, [messages, isPending, inputValue]);
 
 	const sendMessage = () => {
+		setLoading(true);
 		startTransition(async () => {
 			const data = await chatCloudFunc(inputValue);
 			if (data?.messages) {
 				setMessages(data.messages);
 			}
 			setInputValue("");
+			setLoading(false);
 		});
 	};
 

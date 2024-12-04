@@ -16,6 +16,7 @@ interface ChatStore {
 	cameraZoomed: boolean;
 	message: MessageTypes | null;
 	messages: MessageTypes[];
+	setLoading: (loading: boolean) => void;
 	setCameraZoomed: (zoomed: boolean) => void;
 	setMessage: (message: MessageTypes) => void;
 	setMessages: (messages: MessageTypes[]) => void;
@@ -26,6 +27,7 @@ const useChatStore = create<ChatStore>((set) => ({
 	message: null,
 	messages: [],
 	cameraZoomed: true,
+	setLoading: (loading) => set({ loading }),
 	setCameraZoomed: (zoomed) => set({ cameraZoomed: zoomed }),
 	setMessage: (message) => set({ message }),
 	setMessages: (messages) =>

@@ -32,9 +32,9 @@ const Experience = () => {
 			<Environment files={"/images/venice_sunset_1k.hdr"} />
 			Wrapping Dots into Suspense to prevent Blink when Troika/Font is loaded
 			<Suspense>
-				<Dots position-y={1.8} position-x={-0.06} />
+				<Dots position-y={1.8} position-x={-0.1} />
 			</Suspense>
-			<Avatar />
+			<Avatar position-x={-0.08} />
 			<ContactShadows opacity={0.7} position-y={-0.02} />
 		</>
 	);

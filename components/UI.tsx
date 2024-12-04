@@ -15,7 +15,7 @@ export const UI = ({ hidden }: UIProps) => {
 	const [disableSend, setDisableSend] = useState(false);
 
 	useEffect(() => {
-		setDisableSend(messages.length > 0 || isPending);
+		setDisableSend((messages && messages.length > 0) || isPending);
 	}, [messages, isPending, inputValue]);
 
 	const sendMessage = () => {
@@ -23,6 +23,10 @@ export const UI = ({ hidden }: UIProps) => {
 		startTransition(async () => {
 			const data = await chatCloudFunc(inputValue);
 			if (data?.messages) {
+				// console.log(
+				// 	"🚀 --> file: UI.tsx:26 --> startTransition --> data?.messages:",
+				// 	data?.messages
+				// );
 				setMessages(data.messages);
 			}
 			setInputValue("");

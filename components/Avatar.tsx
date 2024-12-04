@@ -87,7 +87,7 @@ const Avatar = (props: GroupProps) => {
 	}, [animation, actions]);
 
 	useEffect(() => {
-		console.log(message);
+		// console.log(message);
 		if (!message) {
 			setAnimation("Idle");
 			return;
@@ -97,11 +97,12 @@ const Avatar = (props: GroupProps) => {
 			message.facialExpression as keyof typeof facialExpressions
 		);
 		setLipsync(message.lipsync as LipsyncType);
+
 		const audio = new Audio("data:audio/mp3;base64," + message.audio);
 		audio.play();
 		setAudio(audio);
 		audio.onended = () => {
-			setMessages(messages.slice(1));
+			setMessages(messages && messages.length > 0 ? messages.slice(1) : null);
 		};
 	}, [messages, message, setMessages]);
 
@@ -264,7 +265,6 @@ const Avatar = (props: GroupProps) => {
 	return (
 		<group {...props} dispose={null} ref={group}>
 			<primitive object={nodes.Hips} />
-			{/* ...other skinnedMesh components... */}
 			<skinnedMesh
 				name="Wolf3D_Body"
 				geometry={nodes.Wolf3D_Body.geometry}

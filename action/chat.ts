@@ -18,6 +18,11 @@ const elevenlabs = new ElevenLabsClient({
 	apiKey: process.env.ELEVENLABS_API_KEY, // Defaults to process.env.ELEVENLABS_API_KEY
 });
 
+const getElevenLabsUsage = async () => {
+	const subscription = await elevenlabs.user.getSubscription();
+	return subscription.character_count / subscription.character_limit;
+};
+
 const chat = async (userMessage: string) => {
 	if (!userMessage) {
 		return {
@@ -143,4 +148,4 @@ const lipSyncMessage = async (index: number) => {
 	console.log(`Lip sync done in ${new Date().getTime() - time}ms`);
 };
 
-export { chat };
+export { chat, getElevenLabsUsage };

@@ -98,12 +98,15 @@ const Avatar = (props: GroupProps) => {
 		);
 		setLipsync(message.lipsync as LipsyncType);
 
-		const audio = new Audio("data:audio/mp3;base64," + message.audio);
-		audio.play();
-		setAudio(audio);
-		audio.onended = () => {
-			setMessages(messages && messages.length > 0 ? messages.slice(1) : null);
-		};
+		if (message.audio) {
+			const audio = new Audio("data:audio/mp3;base64," + message.audio);
+			audio.play();
+			setAudio(audio);
+			audio.onended = () => {
+				setMessages(messages && messages.length > 0 ? messages.slice(1) : null);
+			};
+		}
+
 	}, [messages, message, setMessages]);
 
 	const lerpMorphTarget = (target: string, value: number, speed = 0.1) => {

@@ -1,4 +1,5 @@
 "use client";
+import { getElevenLabsUsage } from "@/action/chat";
 import { chatCloudFunc } from "@/action/chatCloudFunc";
 import useChatStore from "@/store/chatStore";
 import { useEffect, useState, useTransition } from "react";
@@ -9,18 +10,41 @@ type UIProps = {
 
 export const UI = ({ hidden }: UIProps) => {
 	const [inputValue, setInputValue] = useState("");
+	const [error, setError] = useState(false);
 	const [isPending, startTransition] = useTransition();
-	const { cameraZoomed, setCameraZoomed, messages, setMessages, setLoading } =
-		useChatStore();
+	const {
+		loading,
+		cameraZoomed,
+		setCameraZoomed,
+		message,
+		messages,
+		setMessages,
+		setLoading,
+	} = useChatStore();
 	const [disableSend, setDisableSend] = useState(false);
 
 	useEffect(() => {
-		setDisableSend((messages && messages.length > 0) || isPending);
-	}, [messages, isPending, inputValue]);
+		setDisableSend(
+			(!error && messages && messages.length > 0) || isPending || loading
+		);
+	}, [messages, isPending, inputValue, loading, error]);
 
 	const sendMessage = () => {
 		setLoading(true);
 		startTransition(async () => {
+			const usage = await getElevenLabsUsage();
+			if (inputValue !== "" && usage > 0.95) {
+				setError(true);
+				setMessages([
+					{
+						text: "I'm sorry, I have reached my API limit. Please contact the administrator.",
+						facialExpression: "sad",
+						animation: "Crying",
+					},
+				]);
+				setLoading(false);
+				return;
+			}
 			const data = await chatCloudFunc(inputValue);
 			if (data?.messages) {
 				// console.log(
@@ -45,6 +69,13 @@ export const UI = ({ hidden }: UIProps) => {
 					<h1 className="text-xl font-black">Virtual GF</h1>
 					<p>I will always love you ❤️</p>
 				</div>
+				{error && (
+					<div className="flex justify-center items-center w-full">
+						<div className="bg-rose-400 p-8 bg-opacity-80 rounded-md text-lg text-slate-800">
+							{message?.text}
+						</div>
+					</div>
+				)}
 				<div className="flex flex-col items-end justify-center w-full gap-4">
 					<button
 						onClick={() => setCameraZoomed(!cameraZoomed)}

@@ -46,6 +46,7 @@ export const UI = ({ hidden }: UIProps) => {
 				return;
 			}
 			const data = await chatCloudFunc(inputValue);
+			// const data = await chat(inputValue);
 			if (data?.messages) {
 				// console.log(
 				// 	"🚀 --> file: UI.tsx:26 --> startTransition --> data?.messages:",

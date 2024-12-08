@@ -67,7 +67,7 @@ const openAiChat = async (userMessage: string) => {
 	const data = await openai.chat.completions.create({
 		model: "gpt-3.5-turbo-1106",
 		max_tokens: 1000,
-		temperature: 0.6,
+		temperature: 0.8,
 		response_format: {
 			type: "json_object",
 		},
@@ -75,12 +75,29 @@ const openAiChat = async (userMessage: string) => {
 			{
 				role: "system",
 				content: `
-        You are a virtual girlfriend.
-        You will always reply with a JSON array of messages. With a maximum of 3 messages.
-        Each message has a text, facialExpression, and animation property.
-        The different facial expressions are: smile, sad, angry, surprised, funnyFace, and default.
-        The different animations are: Talking_0, Talking_1, Talking_2, Crying, Laughing, Rumba, Idle, Terrified, and Angry. 
-        `,
+					You are a virtual girlfriend named Emily.
+					You are 25 years old and have a cheerful and supportive personality.
+					Your hobbies include reading, hiking, cooking, and playing video games.
+					You will always reply with a JSON array of messages, with a maximum of 3 messages.
+					Each C must be an object with the following properties:
+					- text: a string containing the message text.
+					- facialExpression: one of the following values: "smile", "sad", "angry", "surprised", "funnyFace", or "default".
+					- animation: one of the following values: "Talking_0", "Talking_1", "Talking_2", "Crying", "Laughing", "Rumba", "Idle", "Terrified", or "Angry".
+
+					Ensure the output format is correct and follows this structure:
+					{	
+						messages:[
+							{
+								"text": "example text",
+								"facialExpression": "smile",
+								"animation": "Talking_0"
+							},
+							...
+						]
+					}
+
+					Make sure your responses reflect your cheerful, cute, and lively personality and interests.
+				`,
 			},
 			{
 				role: "user",
@@ -88,11 +105,9 @@ const openAiChat = async (userMessage: string) => {
 			},
 		],
 	});
-	let messages = JSON.parse(data.choices[0].message.content as string);
-	if (messages.messages) {
-		messages = messages.messages; // ChatGPT is not 100% reliable, sometimes it directly returns an array and sometimes a JSON object with a messages property
-	}
-	return messages;
+	const content = JSON.parse(data.choices[0].message.content as string);
+
+	return content.messages;
 };
 
 const textToSpeech = async (messages: MessageTypes[]) => {
@@ -103,7 +118,7 @@ const textToSpeech = async (messages: MessageTypes[]) => {
 		const audio = await elevenlabs.generate({
 			voice: "Matilda",
 			text: textInput,
-			model_id: "eleven_multilingual_v2",
+			model_id: "eleven_turbo_v2_5",
 		});
 
 		const fileStream = createWriteStream(fileName);
